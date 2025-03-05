@@ -1,5 +1,6 @@
 package org.gestionale.gestionalesr.service.product.impl;
 
+import org.gestionale.gestionalesr.config.BaseService;
 import org.gestionale.gestionalesr.model.Product;
 import org.gestionale.gestionalesr.repo.ProductRepository;
 import org.gestionale.gestionalesr.service.product.interfaces.GetAllProductService;
@@ -9,7 +10,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class GetAllProductServiceImpl implements GetAllProductService {
+public class GetAllProductServiceImpl extends BaseService implements GetAllProductService {
 
     @Autowired
     private final ProductRepository productRepository;
@@ -20,6 +21,7 @@ public class GetAllProductServiceImpl implements GetAllProductService {
 
     @Override
     public List<Product> getAllProduct() {
+        logger.info("Get all products");
         List<Product> result = productRepository.findAll();
         return result;
     }
