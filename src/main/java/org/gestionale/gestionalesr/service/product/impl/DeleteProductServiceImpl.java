@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class DeleteProductServiceImpl implements DeleteProductService {
-
+//ciao
     @Autowired
     private final ProductRepository productRepository;
 
