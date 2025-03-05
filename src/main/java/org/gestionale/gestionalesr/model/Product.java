@@ -1,7 +1,9 @@
 package org.gestionale.gestionalesr.model;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
@@ -10,6 +12,8 @@ import java.util.List;
 @Entity
 @Getter
 @Setter
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "products")
 public class Product {
 
@@ -37,27 +41,4 @@ public class Product {
 
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
-
-    // Costruttori
-    public Product() {}
-
-    public Product(String name, String description, String sku, String barcode, String category, String brand,
-                   Double price, Double discount, Integer stockQuantity, String unit, Boolean isActive,
-                   List<String> images, List<String> tags, LocalDateTime createdAt, LocalDateTime updatedAt) {
-        this.name = name;
-        this.description = description;
-        this.sku = sku;
-        this.barcode = barcode;
-        this.category = category;
-        this.brand = brand;
-        this.price = price;
-        this.discount = discount;
-        this.stockQuantity = stockQuantity;
-        this.unit = unit;
-        this.isActive = isActive;
-        this.images = images;
-        this.tags = tags;
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
-    }
 }
