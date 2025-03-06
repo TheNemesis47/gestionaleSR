@@ -1,6 +1,6 @@
 package org.gestionale.gestionalesr.service.product.impl;
 
-import org.gestionale.gestionalesr.config.BaseService;
+import org.gestionale.gestionalesr.config.service.BaseService;
 import org.gestionale.gestionalesr.model.Product;
 import org.gestionale.gestionalesr.repo.ProductRepository;
 import org.gestionale.gestionalesr.service.product.interfaces.CreateProductService;

@@ -1,13 +1,7 @@
 package org.gestionale.gestionalesr.mapper.out;
 
-import org.gestionale.gestionalesr.config.MapStructConfig;
+import org.gestionale.gestionalesr.config.mapstruct.MapStructConfig;
 import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import org.mapstruct.Named;
-
-import java.time.Instant;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Mapper(config = MapStructConfig.class)
 public interface es {
