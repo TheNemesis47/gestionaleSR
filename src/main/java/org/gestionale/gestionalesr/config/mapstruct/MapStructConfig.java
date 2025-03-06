@@ -1,4 +1,4 @@
-package org.gestionale.gestionalesr.exception;
+package org.gestionale.gestionalesr.config.mapstruct;
 
 import org.mapstruct.CollectionMappingStrategy;
 import org.mapstruct.InjectionStrategy;
