@@ -1,0 +1,12 @@
+per il db creare su pgadmin4 un db chiamato "gestionale" avviare l app e creerá le tabelle
+insert di esempio:
+
+INSERT INTO "users" (user_type, email, password, role) VALUES ('Employee', 'mail', 'pass', 'Employee');
+returning id;
+
+INSERT INTO "employees" (first_name, last_name, phone_number, salary, id) VALUES ('mario', 'rossi', '333333' , 1000, 1);
+
+select u.id, u.email, u.password, u.role,
+	   e.first_name, e.last_name, e.phone_number, e.salary
+FROM users u
+JOIN employees e ON u.id = e.id
