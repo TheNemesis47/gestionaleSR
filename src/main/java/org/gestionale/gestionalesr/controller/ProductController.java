@@ -53,7 +53,7 @@ public class ProductController {
     }
 
     //modifica prodotto
-    @PutMapping("/{productId")
+    @PutMapping("/{productId}")
     public ResponseEntity<Product> updateProduct(@RequestBody Product product, @PathVariable Long productId) {
         Product response = updateProductService.updateProduct(product, productId);
         if (response == null) {
@@ -64,7 +64,7 @@ public class ProductController {
     }
 
     //elimina prodotto
-    @DeleteMapping("/{productId")
+    @DeleteMapping("/{productId}")
     public ResponseEntity<Boolean> deleteProduct(@PathVariable Long productId) {
         Boolean response = deleteProductService.deleteProduct(productId);
         return ResponseEntity.ok(response);

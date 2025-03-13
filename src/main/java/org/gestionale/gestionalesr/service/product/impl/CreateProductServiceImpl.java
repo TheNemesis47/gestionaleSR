@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 @Service
 public class CreateProductServiceImpl extends BaseService implements CreateProductService {
 
-    @Autowired
     private final ProductRepository productRepository;
 
     public CreateProductServiceImpl(ProductRepository productRepository) {
