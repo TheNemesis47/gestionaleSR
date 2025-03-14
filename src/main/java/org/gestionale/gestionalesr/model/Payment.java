@@ -1,8 +1,7 @@
 package org.gestionale.gestionalesr.model;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
@@ -10,16 +9,28 @@ import java.time.LocalDateTime;
 @Table(name = "payments")
 @Getter
 @Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class Payment {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne(mappedBy = "payment")
+    @OneToOne
+    @JoinColumn(name = "order_id", nullable = false)
     private Order order;
 
-    private String paymentMethod;  // Metodo di pagamento (es. "Contanti", "Carta", "PayPal")
-    private String transactionId;  // ID transazione se digitale
-    private Double amount;  // Importo pagato
-    private LocalDateTime paymentDate;  // Data del pagamento
+    private String method;
+
+    @Column(name = "transaction_id")
+    private String transactionId;
+
+    private Double amount;
+
+    private String currency;
+
+    private String status;
+
+    private LocalDateTime date;
 }

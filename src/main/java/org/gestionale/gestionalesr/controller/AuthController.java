@@ -1,7 +1,6 @@
 package org.gestionale.gestionalesr.controller;
 
 import org.gestionale.gestionalesr.model.Employee;
-import org.gestionale.gestionalesr.model.Users;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -14,8 +13,8 @@ public class AuthController {
 
     private List<Employee> usersList = new ArrayList<>(
             List.of(
-                    new Employee("prova", "prova", "prova", 1000.0, "prova", "prova"),
-                    new Employee("prova2", "prova2", "prova2", 2000.0, "prova2", "prova2")
+                    new Employee(1L, "prova@mail.com", "password", "Employee", "Mario", "Rossi", "1234567890"),
+                    new Employee(2L, "prova2@mail.com", "password", "Admin", "Luca", "Bianchi", "0987654321")
             ));
 
     @GetMapping("/users")
