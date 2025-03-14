@@ -2,8 +2,7 @@ package org.gestionale.gestionalesr;
 
 import jakarta.transaction.Transactional;
 import org.gestionale.gestionalesr.model.Employee;
-import org.gestionale.gestionalesr.model.Users;
-import org.gestionale.gestionalesr.repo.UserRepository;
+import org.gestionale.gestionalesr.repo.EmployeeRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -15,7 +14,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class UserRepositoryTest {
 
     @Autowired
-    private UserRepository userRepository;
+    private EmployeeRepository repo;
 
     @Test
     void testFindByEmail() {
@@ -29,10 +28,10 @@ public class UserRepositoryTest {
         // (Opzionale) Imposta anche phoneNumber, salary, ecc.
 
         // Salviamo l'Employee nel DB
-        userRepository.save(employee);
+        repo.save(employee);
 
         // Recuperiamo l'utente tramite il repository
-        Users foundUser = userRepository.findByEmail("dipendente@example.com");
+        Employee foundUser = repo.findByEmail("dipendente@example.com");
 
         // Verifichiamo che l'utente sia stato trovato correttamente
         assertNotNull(foundUser, "L'utente non dovrebbe essere null");

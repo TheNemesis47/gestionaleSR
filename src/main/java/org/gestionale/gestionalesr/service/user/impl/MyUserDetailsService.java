@@ -1,8 +1,8 @@
 package org.gestionale.gestionalesr.service.user.impl;
 
+import org.gestionale.gestionalesr.model.Employee;
 import org.gestionale.gestionalesr.model.UserPrincipal;
-import org.gestionale.gestionalesr.model.Users;
-import org.gestionale.gestionalesr.repo.UserRepository;
+import org.gestionale.gestionalesr.repo.EmployeeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -13,12 +13,12 @@ import org.springframework.stereotype.Service;
 public class MyUserDetailsService implements UserDetailsService {
 
     @Autowired
-    private UserRepository userRepo;
+    private EmployeeRepository repo;
 
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        Users user = userRepo.findByEmail(email);
+        Employee user = repo.findByEmail(email);
         System.out.println("User: " + user);
         if (user == null) {
             System.out.println("User Not Found");

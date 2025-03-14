@@ -1,20 +1,17 @@
 package org.gestionale.gestionalesr.model;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
+@Table(name = "products")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "products")
 public class Product {
 
     @Id
@@ -22,29 +19,47 @@ public class Product {
     private Long id;
 
     private String name;
+
     private String description;
-    private String sku;
-    private String barcode;
+
     private String category;
-    private String brand;
-    private Double price;
-    private Double discount;
+
+    private String subcategory;
+
+    @Column(name = "purchase_price")
+    private Double purchasePrice;
+
+    @Column(name = "sale_price")
+    private Double salePrice;
+
+    private Double vatRate;
+
+    private String barcode;
+
+    private String imageUrl;
+
+    private Double weight;
+
+    private Double width;
+
+    private Double height;
+
+    private Double depth;
+
+    private Double volume;
+
+    @Column(name = "stock_quantity")
     private Integer stockQuantity;
-    private String unit;
-    private Boolean isActive;
-
-    @ElementCollection
-    private List<String> images;
-
-    @ElementCollection
-    private List<String> tags;
-
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
 
     @ManyToOne
     @JoinColumn(name = "supplier_id", nullable = false)
     private Supplier supplier;
+
+    @Column(name = "created_at", updatable = false)
+    private LocalDateTime createdAt;
+
+    @Column(name = "updated_at")
+    private LocalDateTime updatedAt;
 
     @PrePersist
     protected void onCreate() {
@@ -54,9 +69,5 @@ public class Product {
     @PreUpdate
     protected void onUpdate() {
         updatedAt = LocalDateTime.now();
-    }
-
-    public String getName() {
-        return name;
     }
 }

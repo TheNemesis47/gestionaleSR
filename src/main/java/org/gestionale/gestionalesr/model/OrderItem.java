@@ -1,20 +1,14 @@
 package org.gestionale.gestionalesr.model;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-
-import java.time.LocalDateTime;
-import java.util.List;
+import lombok.*;
 
 @Entity
+@Table(name = "order_items")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "order-items")
 public class OrderItem {
 
     @Id
@@ -22,14 +16,18 @@ public class OrderItem {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "product_id", nullable = false)
-    private Product product;
-
-    @ManyToOne
     @JoinColumn(name = "order_id", nullable = false)
     private Order order;
 
-    private int quantity;
+    @ManyToOne
+    @JoinColumn(name = "product_id", nullable = false)
+    private Product product;
+
+    private Integer quantity;
+
+    @Column(name = "unit_price")
     private Double unitPrice;
+
+    @Column(name = "total_price")
     private Double totalPrice;
 }
