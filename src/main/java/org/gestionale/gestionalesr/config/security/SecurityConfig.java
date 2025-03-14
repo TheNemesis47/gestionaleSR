@@ -55,7 +55,7 @@ public class SecurityConfig {
         return provider;
     }
 
-    // Il manager é necessario per la configurazione dell'authentication provider
+    // Il manager é necessario per la configurazione dell'authentication provider!
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
          return configuration.getAuthenticationManager();
