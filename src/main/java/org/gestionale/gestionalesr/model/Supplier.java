@@ -1,5 +1,6 @@
 package org.gestionale.gestionalesr.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -17,8 +18,9 @@ public class Supplier {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "vat_number")
-    private String vatNumber;
+    @Column(name = "p_iva", nullable = false, unique = true)
+    @JsonProperty("piva")
+    private String piva;
 
     private String name;
 

@@ -23,6 +23,12 @@ public class GetAllProductServiceImpl extends BaseService implements GetAllProdu
     public List<Product> getAllProduct() {
         logger.info("Get all products");
         List<Product> result = productRepository.findAll();
-        return result;
+        if (result.isEmpty()) {
+            logger.warn("No products found");
+            return null;
+        } else {
+            logger.info("Found {} products", result.size());
+            return result;
+        }
     }
 }
