@@ -3,12 +3,11 @@ package org.gestionale.gestionalesr.service.user.impl;
 import org.gestionale.gestionalesr.config.service.BaseService;
 import org.gestionale.gestionalesr.exception.Gestionale404Exception;
 import org.gestionale.gestionalesr.model.Employee;
-import org.gestionale.gestionalesr.model.Users;
-import org.gestionale.gestionalesr.repo.UserRepository;
+import org.gestionale.gestionalesr.repo.EmployeeRepository;
 import org.gestionale.gestionalesr.request.LoginRequest;
 import org.gestionale.gestionalesr.request.RegisterRequest;
 import org.gestionale.gestionalesr.resource.AuthResponse;
-import org.gestionale.gestionalesr.service.user.interfaces.UserService;
+import org.gestionale.gestionalesr.service.user.interfaces.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -17,7 +16,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
-public class UserServiceImpl extends BaseService implements UserService {
+public class EmployeeServiceImpl extends BaseService implements EmployeeService {
 
     @Autowired
     private JWTService jwtService;
@@ -26,21 +25,20 @@ public class UserServiceImpl extends BaseService implements UserService {
     AuthenticationManager authManager;
 
     @Autowired
-    private UserRepository repo;
+    private EmployeeRepository repo;
 
 
     private BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(12);
 
     @Override
-    public Users registerUser(RegisterRequest request) {
-        Employee employee = request.getEmployee();
-        String email = employee.getEmail();
-        Users user = repo.findByEmail(employee.getEmail());
+    public Employee registerUser(Employee request) {
+        String email = request.getEmail();
+        Employee user = repo.findByEmail(request.getEmail());
         if (user != null && email.equals(user.getEmail())) {
             throw new Gestionale404Exception("User already exists");
         }
-        employee.setPassword(encoder.encode(employee.getPassword()));
-        return repo.save(employee);
+        request.setPassword(encoder.encode(request.getPassword()));
+        return repo.save(request);
     }
 
     @Override
