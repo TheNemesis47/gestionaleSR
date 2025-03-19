@@ -49,7 +49,7 @@ public class ProductController {
     @PostMapping
     public ResponseEntity<Product> createProduct(@RequestBody Product product) {
         Product response = createProductService.createProduct(product);
-        return ResponseEntity.ok(response);
+        return response == null ? ResponseEntity.badRequest().build() : ResponseEntity.ok(response);
     }
 
     //modifica prodotto
