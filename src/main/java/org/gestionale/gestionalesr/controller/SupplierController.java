@@ -26,13 +26,14 @@ public class SupplierController {
 
     @GetMapping
     public ResponseEntity<List<Supplier>> getAllSuppliers() {
-        List<Supplier> response = getAllSupplierServiceService.getAllSuppliers();
+        var response = getAllSupplierServiceService.getAllSuppliers();
         return ResponseEntity.ok(response);
     }
 
+
     @PostMapping
     public ResponseEntity<Supplier> createSupplier(@RequestBody Supplier supplier) {
-        Supplier response = createSupplierServiceService.createSupplier(supplier);
+        var response = createSupplierServiceService.createSupplier(supplier);
         return ResponseEntity.ok(response);
     }
 }

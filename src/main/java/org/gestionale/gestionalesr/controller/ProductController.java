@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/product")
@@ -40,13 +39,13 @@ public class ProductController {
 
     @GetMapping
     public ResponseEntity<List<Product>> getProduct() {
-        List<Product> response = getAllProductService.getAllProduct();
+        var response = getAllProductService.getAllProduct();
         return ResponseEntity.ok(response);
     }
 
     @GetMapping("/{productId}")
     public ResponseEntity<Product> getProduct(@PathVariable Long productId) {
-        Optional<Product> response = getProductService.getProduct(productId);
+        var response = getProductService.getProduct(productId);
         return response.map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
@@ -57,10 +56,10 @@ public class ProductController {
             @RequestPart(value = "images", required = false) List<MultipartFile> images
     ) {
         try {
-            ObjectMapper objectMapper = new ObjectMapper();
-            ProductRequest productDTO = objectMapper.readValue(productJson, ProductRequest.class);
+            var objectMapper = new ObjectMapper();
+            var productDTO = objectMapper.readValue(productJson, ProductRequest.class);
 
-            Product savedProduct = createProductService.createProduct(productDTO, images);
+            var savedProduct = createProductService.createProduct(productDTO, images);
             if (savedProduct == null) {
                 return ResponseEntity.badRequest().body("Errore nella creazione del prodotto");
             }
@@ -73,7 +72,7 @@ public class ProductController {
     //modifica prodotto
     @PutMapping("/{productId}")
     public ResponseEntity<Product> updateProduct(@RequestBody Product product, @PathVariable Long productId) {
-        Product response = updateProductService.updateProduct(product, productId);
+        var response = updateProductService.updateProduct(product, productId);
         if (response == null) {
             return ResponseEntity.notFound().build();
         } else {
@@ -84,7 +83,7 @@ public class ProductController {
     //elimina prodotto
     @DeleteMapping("/{productId}")
     public ResponseEntity<Boolean> deleteProduct(@PathVariable Long productId) {
-        Boolean response = deleteProductService.deleteProduct(productId);
+        var response = deleteProductService.deleteProduct(productId);
         return ResponseEntity.ok(response);
     }
 }

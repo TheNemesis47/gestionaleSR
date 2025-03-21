@@ -22,7 +22,7 @@ public class GetAllSuppliersServiceImpl extends BaseService implements GetAllSup
     @Override
     public List<Supplier> getAllSuppliers() {
         logger.info("Getting all suppliers");
-        List<Supplier> suppliers = supplierRepository.findAll();
+        var suppliers = supplierRepository.findAll();
         if (suppliers.isEmpty()) {
             logger.warn("No suppliers found");
             return  null;

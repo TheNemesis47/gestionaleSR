@@ -21,9 +21,9 @@ public class UpdateProductServiceImpl extends BaseService implements UpdateProdu
     @Override
     public Product updateProduct(Product product, Long id) {
         logger.info("Update product with id {}", id);
-        boolean exists = productRepository.existsById(id);
+        var exists = productRepository.existsById(id);
         if (!exists) {
-            Product result = productRepository.save(product);
+            var result = productRepository.save(product);
             logger.info("Product with id {} was successfully updated", id);
             return product;
         } else {
