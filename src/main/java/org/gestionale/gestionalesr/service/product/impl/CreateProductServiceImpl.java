@@ -1,6 +1,7 @@
 package org.gestionale.gestionalesr.service.product.impl;
 
 import org.gestionale.gestionalesr.config.service.BaseService;
+import org.gestionale.gestionalesr.mapper.FromProductRequestToProductMapper;
 import org.gestionale.gestionalesr.model.Product;
 import org.gestionale.gestionalesr.model.Supplier;
 import org.gestionale.gestionalesr.model.UserPrincipal;
@@ -27,36 +28,27 @@ public class CreateProductServiceImpl extends BaseService implements CreateProdu
     private final ProductRepository productRepository;
     @Autowired
     private final SupplierRepository supplierRepository;
+    @Autowired
+    private final FromProductRequestToProductMapper fromProductRequestToProductMapper;
 
-    public CreateProductServiceImpl(ProductRepository productRepository, SupplierRepository supplierRepository) {
+
+    public CreateProductServiceImpl(ProductRepository productRepository,
+                                    SupplierRepository supplierRepository,
+                                    FromProductRequestToProductMapper fromProductRequestToProductMapper) {
         this.productRepository = productRepository;
         this.supplierRepository = supplierRepository;
+        this.fromProductRequestToProductMapper = fromProductRequestToProductMapper;
     }
 
     @Override
-    public Product createProduct(ProductRequest productDTO, List<MultipartFile> images) {
-        Long supplierId = productDTO.getSupplierId();
+    public Product createProduct(ProductRequest productRequest, List<MultipartFile> images) {
+        Product product = fromProductRequestToProductMapper.apply(productRequest);
 
-        // Converte il DTO in un'entità Product
-        Product product = new Product();
-        product.setName(productDTO.getName());
-        product.setDescription(productDTO.getDescription());
-        product.setCategory(productDTO.getCategory());
-        product.setSubcategory(productDTO.getSubcategory());
-        product.setPurchasePrice(productDTO.getPurchasePrice());
-        product.setSalePrice(productDTO.getSalePrice());
-        product.setVatRate(productDTO.getVatRate());
-        product.setBarcode(productDTO.getBarcode());
-        product.setWeight(productDTO.getWeight());
-        product.setWidth(productDTO.getWidth());
-        product.setHeight(productDTO.getHeight());
-        product.setDepth(productDTO.getDepth());
-        product.setVolume(productDTO.getVolume());
-        product.setStockQuantity(productDTO.getStockQuantity());
-
-        // Se viene passato un supplierId, recupera il fornitore e lo imposta
+        // Logica custom per il supplier
+        Long supplierId = productRequest.getSupplierId();
         if (supplierId != null) {
-            Supplier supplier = supplierRepository.findById(supplierId).orElse(null);
+            Supplier supplier = supplierRepository.findById(supplierId)
+                    .orElseThrow(() -> new RuntimeException("Supplier non trovato con id: " + supplierId));
             product.setSupplier(supplier);
         }
 
