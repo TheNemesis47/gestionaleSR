@@ -1,10 +1,15 @@
 package org.gestionale.gestionalesr.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.gestionale.gestionalesr.model.Product;
+import org.gestionale.gestionalesr.request.ProductRequest;
 import org.gestionale.gestionalesr.service.product.interfaces.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Optional;
@@ -46,10 +51,23 @@ public class ProductController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    @PostMapping
-    public ResponseEntity<Product> createProduct(@RequestBody Product product) {
-        Product response = createProductService.createProduct(product);
-        return ResponseEntity.ok(response);
+    @PostMapping(consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
+    public ResponseEntity<?> createProduct(
+            @RequestPart(value = "product", required = true) String productJson,
+            @RequestPart(value = "images", required = false) List<MultipartFile> images
+    ) {
+        try {
+            ObjectMapper objectMapper = new ObjectMapper();
+            ProductRequest productDTO = objectMapper.readValue(productJson, ProductRequest.class);
+
+            Product savedProduct = createProductService.createProduct(productDTO, images);
+            if (savedProduct == null) {
+                return ResponseEntity.badRequest().body("Errore nella creazione del prodotto");
+            }
+            return ResponseEntity.ok(savedProduct);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Errore durante la deserializzazione del prodotto: " + e.getMessage());
+        }
     }
 
     //modifica prodotto

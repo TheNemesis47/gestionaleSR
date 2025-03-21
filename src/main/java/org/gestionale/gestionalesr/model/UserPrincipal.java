@@ -9,7 +9,7 @@ import java.util.Collections;
 
 public class UserPrincipal implements UserDetails {
 
-    private Employee user;
+    private final Employee user;
 
     public UserPrincipal(Employee user) {
         this.user = user;
@@ -48,5 +48,9 @@ public class UserPrincipal implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+    public Long getId() {
+        return user.getId();
     }
 }

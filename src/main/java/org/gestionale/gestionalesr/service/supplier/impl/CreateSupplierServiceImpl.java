@@ -19,14 +19,32 @@ public class CreateSupplierServiceImpl extends BaseService implements CreateSupp
 
     @Override
     public Supplier createSupplier(Supplier supplier) {
-        String piva = supplier.getPiva();
-        Supplier existingSupplier = supplierRepository.findByPiva(piva);
-        if (existingSupplier != null && piva.equals(existingSupplier.getPiva())){
-            logger.error("Supplier with VAT number {} already exists", piva);
+        Boolean isPresent = isSupplierPresent(supplier);
+
+        // Se è già presente, blocchiamo
+        if (isPresent) {
+            logger.error("Supplier with VAT number {} already exists", supplier.getPiva());
             return null;
         } else {
-            logger.info("Creating supplier with VAT number {}", piva);
+            // Altrimenti salviamo
+            logger.info("Creating supplier with VAT number {}", supplier.getPiva());
             return supplierRepository.save(supplier);
+        }
+    }
+
+    private Boolean isSupplierPresent(Supplier supplier) {
+        String piva = supplier.getPiva();
+        String companyName = supplier.getName();
+        Supplier existingSupplierByPiva = supplierRepository.findByPiva(piva);
+        Supplier existingSupplierByName = supplierRepository.findByName(companyName);
+
+        if ((existingSupplierByPiva != null && piva.equals(existingSupplierByPiva.getPiva())) ||
+            (existingSupplierByName != null && companyName.equals(existingSupplierByName.getName()))) {
+            logger.error("Supplier with VAT number {} or company name {} already exists", piva, companyName);
+            return true;
+        } else {
+            logger.info("Creating supplier with VAT number {} and company name {}", piva, companyName);
+            return false;
         }
     }
 }
