@@ -3,7 +3,6 @@ package org.gestionale.gestionalesr.service.product.impl;
 import org.gestionale.gestionalesr.config.service.BaseService;
 import org.gestionale.gestionalesr.mapper.FromProductRequestToProductMapper;
 import org.gestionale.gestionalesr.model.Product;
-import org.gestionale.gestionalesr.model.Supplier;
 import org.gestionale.gestionalesr.model.UserPrincipal;
 import org.gestionale.gestionalesr.repo.ProductRepository;
 import org.gestionale.gestionalesr.repo.SupplierRepository;
@@ -18,7 +17,6 @@ import java.util.List;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 
 @Service
@@ -42,12 +40,12 @@ public class CreateProductServiceImpl extends BaseService implements CreateProdu
 
     @Override
     public Product createProduct(ProductRequest productRequest, List<MultipartFile> images) {
-        Product product = fromProductRequestToProductMapper.apply(productRequest);
+        var product = fromProductRequestToProductMapper.apply(productRequest);
 
         // Logica custom per il supplier
-        Long supplierId = productRequest.getSupplierId();
+        var supplierId = productRequest.getSupplierId();
         if (supplierId != null) {
-            Supplier supplier = supplierRepository.findById(supplierId)
+            var supplier = supplierRepository.findById(supplierId)
                     .orElseThrow(() -> new RuntimeException("Supplier non trovato con id: " + supplierId));
             product.setSupplier(supplier);
         }
@@ -56,14 +54,14 @@ public class CreateProductServiceImpl extends BaseService implements CreateProdu
         product = productRepository.save(product);
 
         // Recupera l'id dell'employee loggato dal contesto di Spring Security
-        UserPrincipal userPrincipal = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        Long employeeId = userPrincipal.getId();
+        var userPrincipal = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        var employeeId = userPrincipal.getId();
 
         // Definisce la directory base dove salvare le immagini (la cartella "negozioImmagini" deve esistere o verrà creata)
-        String baseDir = "src/main/resources/negozioImmagini";
+        var baseDir = "src/main/resources/negozioImmagini";
         // Costruisce il path per il loggato: negozioImmagini/<employeeId>
-        String employeeDirPath = baseDir + File.separator + employeeId;
-        File employeeDir = new File(employeeDirPath);
+        var employeeDirPath = baseDir + File.separator + employeeId;
+        var employeeDir = new File(employeeDirPath);
         if (!employeeDir.exists()) {
             boolean created = employeeDir.mkdirs();
             if (!created) {
@@ -75,11 +73,11 @@ public class CreateProductServiceImpl extends BaseService implements CreateProdu
         // Gestione del salvataggio delle immagini
         if (images != null && !images.isEmpty()) {
             for (int i = 0; i < images.size(); i++) {
-                MultipartFile file = images.get(i);
-                String originalFilename = file.getOriginalFilename();
+                var file = images.get(i);
+                var originalFilename = file.getOriginalFilename();
                 // Crea un nome file univoco (ad esempio aggiungendo un timestamp)
-                String fileName = System.currentTimeMillis() + "_" + originalFilename;
-                Path filePath = Paths.get(employeeDirPath, fileName);
+                var fileName = System.currentTimeMillis() + "_" + originalFilename;
+                var filePath = Paths.get(employeeDirPath, fileName);
                 try {
                     Files.write(filePath, file.getBytes());
                     // Per esempio, se vuoi salvare il percorso della prima immagine nel campo imageUrl

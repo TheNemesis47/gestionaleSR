@@ -2,7 +2,6 @@ package org.gestionale.gestionalesr.controller;
 
 import org.gestionale.gestionalesr.model.Employee;
 import org.gestionale.gestionalesr.request.LoginRequest;
-import org.gestionale.gestionalesr.request.RegisterRequest;
 import org.gestionale.gestionalesr.resource.AuthResponse;
 import org.gestionale.gestionalesr.service.user.impl.EmployeeServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -18,7 +18,7 @@ public class DeleteProductServiceImpl extends BaseService implements DeleteProdu
     @Override
     public Boolean deleteProduct(Long id) {
         logger.info("Deleting product with id {}", id);
-        boolean exists = productRepository.existsById(id);
+        var exists = productRepository.existsById(id);
         if (exists) {
             logger.info("Product with id {} already exists", id);
             productRepository.deleteById(id);

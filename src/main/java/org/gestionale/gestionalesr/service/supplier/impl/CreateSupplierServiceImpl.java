@@ -19,7 +19,7 @@ public class CreateSupplierServiceImpl extends BaseService implements CreateSupp
 
     @Override
     public Supplier createSupplier(Supplier supplier) {
-        Boolean isPresent = isSupplierPresent(supplier);
+        var isPresent = isSupplierPresent(supplier);
 
         // Se è già presente, blocchiamo
         if (isPresent) {
@@ -33,10 +33,10 @@ public class CreateSupplierServiceImpl extends BaseService implements CreateSupp
     }
 
     private Boolean isSupplierPresent(Supplier supplier) {
-        String piva = supplier.getPiva();
-        String companyName = supplier.getName();
-        Supplier existingSupplierByPiva = supplierRepository.findByPiva(piva);
-        Supplier existingSupplierByName = supplierRepository.findByName(companyName);
+        var piva = supplier.getPiva();
+        var companyName = supplier.getName();
+        var existingSupplierByPiva = supplierRepository.findByPiva(piva);
+        var existingSupplierByName = supplierRepository.findByName(companyName);
 
         if ((existingSupplierByPiva != null && piva.equals(existingSupplierByPiva.getPiva())) ||
             (existingSupplierByName != null && companyName.equals(existingSupplierByName.getName()))) {
