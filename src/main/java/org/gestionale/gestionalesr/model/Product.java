@@ -1,5 +1,7 @@
 package org.gestionale.gestionalesr.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -19,11 +21,8 @@ public class Product {
     private Long id;
 
     private String name;
-
     private String description;
-
     private String category;
-
     private String subcategory;
 
     @Column(name = "purchase_price")
@@ -33,33 +32,37 @@ public class Product {
     private Double salePrice;
 
     private Double vatRate;
-
     private String barcode;
 
-    private String imageUrl;
-
     private Double weight;
-
     private Double width;
-
     private Double height;
-
     private Double depth;
-
     private Double volume;
+    private String tag;
 
     @Column(name = "stock_quantity")
     private Integer stockQuantity;
-
-    @ManyToOne
-    @JoinColumn(name = "supplier_id", nullable = false)
-    private Supplier supplier;
 
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
 
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
+
+    @ManyToOne
+    @JoinColumn(name = "shop_id", nullable = false)
+    @JsonBackReference("shop-product") // Evita il ciclo infinito con Shop
+    private Shop shop;
+
+    @ManyToOne
+    @JoinColumn(name = "supplier_id", nullable = false)
+    @JsonBackReference("supplier-product") // Evita il ciclo infinito con Supplier
+    private Supplier supplier;
+
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference("product-images") // Gestisce la relazione con Images
+    private List<Images> images;
 
     @PrePersist
     protected void onCreate() {

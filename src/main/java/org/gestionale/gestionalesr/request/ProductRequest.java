@@ -26,4 +26,5 @@ public class ProductRequest {
     private Integer stockQuantity;
     private Long supplierId;
     private String imageUrl;
+    private String tag;
 }

@@ -1,9 +1,8 @@
 package org.gestionale.gestionalesr.service.product.impl;
 
 import org.gestionale.gestionalesr.config.service.BaseService;
-import org.gestionale.gestionalesr.model.Product;
-import org.gestionale.gestionalesr.model.Supplier;
-import org.gestionale.gestionalesr.model.UserPrincipal;
+import org.gestionale.gestionalesr.model.*;
+import org.gestionale.gestionalesr.repo.EmployeeRepository;
 import org.gestionale.gestionalesr.repo.ProductRepository;
 import org.gestionale.gestionalesr.repo.SupplierRepository;
 import org.gestionale.gestionalesr.request.ProductRequest;
@@ -27,17 +26,22 @@ public class CreateProductServiceImpl extends BaseService implements CreateProdu
     private final ProductRepository productRepository;
     @Autowired
     private final SupplierRepository supplierRepository;
+    @Autowired
+    private final EmployeeRepository employeeRepository;
 
-    public CreateProductServiceImpl(ProductRepository productRepository, SupplierRepository supplierRepository) {
+    public CreateProductServiceImpl(ProductRepository productRepository,
+                                    SupplierRepository supplierRepository,
+                                    EmployeeRepository employeeRepository) {
         this.productRepository = productRepository;
         this.supplierRepository = supplierRepository;
+        this.employeeRepository = employeeRepository;
     }
 
     @Override
     public Product createProduct(ProductRequest productDTO, List<MultipartFile> images) {
         Long supplierId = productDTO.getSupplierId();
 
-        // Converte il DTO in un'entità Product
+        // Creazione del prodotto
         Product product = new Product();
         product.setName(productDTO.getName());
         product.setDescription(productDTO.getDescription());
@@ -54,54 +58,52 @@ public class CreateProductServiceImpl extends BaseService implements CreateProdu
         product.setVolume(productDTO.getVolume());
         product.setStockQuantity(productDTO.getStockQuantity());
 
+        // Recupera l'Employee loggato e lo Shop associato
+        UserPrincipal userPrincipal = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Long employeeId = userPrincipal.getId();
+        Employee employee = employeeRepository.findById(employeeId).orElse(null);
+
+        if (employee == null || employee.getShop() == null) {
+            throw new RuntimeException("L'employee loggato non è associato a nessun shop!");
+        }
+
+        product.setShop(employee.getShop());
+
         // Se viene passato un supplierId, recupera il fornitore e lo imposta
         if (supplierId != null) {
             Supplier supplier = supplierRepository.findById(supplierId).orElse(null);
             product.setSupplier(supplier);
         }
 
-        // Salva preliminarmente il prodotto per avere eventualmente un id (se necessario)
+        // ✅ Salva il prodotto SOLO DOPO aver settato il negozio
         product = productRepository.save(product);
 
-        // Recupera l'id dell'employee loggato dal contesto di Spring Security
-        UserPrincipal userPrincipal = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        Long employeeId = userPrincipal.getId();
-
-        // Definisce la directory base dove salvare le immagini (la cartella "negozioImmagini" deve esistere o verrà creata)
-        String baseDir = "src/main/resources/negozioImmagini";
-        // Costruisce il path per il loggato: negozioImmagini/<employeeId>
-        String employeeDirPath = baseDir + File.separator + employeeId;
-        File employeeDir = new File(employeeDirPath);
-        if (!employeeDir.exists()) {
-            boolean created = employeeDir.mkdirs();
-            if (!created) {
-                // Se non riesci a creare la cartella, puoi decidere di lanciare un'eccezione
+        // Gestione delle immagini
+        if (images != null && !images.isEmpty()) {
+            String baseDir = "src/main/resources/negozioImmagini";
+            String employeeDirPath = baseDir + File.separator + employeeId;
+            File employeeDir = new File(employeeDirPath);
+            if (!employeeDir.exists() && !employeeDir.mkdirs()) {
                 throw new RuntimeException("Impossibile creare la cartella per l'employee id " + employeeId);
             }
-        }
 
-        // Gestione del salvataggio delle immagini
-        if (images != null && !images.isEmpty()) {
-            for (int i = 0; i < images.size(); i++) {
-                MultipartFile file = images.get(i);
-                String originalFilename = file.getOriginalFilename();
-                // Crea un nome file univoco (ad esempio aggiungendo un timestamp)
-                String fileName = System.currentTimeMillis() + "_" + originalFilename;
-                Path filePath = Paths.get(employeeDirPath, fileName);
+            for (MultipartFile file : images) {
                 try {
+                    String fileName = System.currentTimeMillis() + "_" + file.getOriginalFilename();
+                    Path filePath = Paths.get(employeeDirPath, fileName);
                     Files.write(filePath, file.getBytes());
-                    // Per esempio, se vuoi salvare il percorso della prima immagine nel campo imageUrl
-                    if (i == 0) {
-                        product.setImageUrl(filePath.toString());
-                    }
+
+                    // Salva il percorso dell'immagine nel database
+                    Images image = new Images();
+                    image.setImageUrl(filePath.toString());
+                    image.setProduct(product);
+                    image.setShop(employee.getShop());
                 } catch (IOException e) {
                     e.printStackTrace();
-                    // Gestisci l'errore: qui puoi decidere di lanciare un'eccezione o continuare
                 }
             }
         }
 
-        // Salva il prodotto aggiornato (con eventuale imageUrl) e restituisce l'entità
         return productRepository.save(product);
     }
 }

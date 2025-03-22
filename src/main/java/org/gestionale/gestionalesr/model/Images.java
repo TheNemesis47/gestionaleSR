@@ -5,26 +5,26 @@ import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
-@Table(name = "employees")
-@NoArgsConstructor
-@AllArgsConstructor
+@Table(name = "images")
 @Getter
 @Setter
-public class Employee {
+@NoArgsConstructor
+@AllArgsConstructor
+public class Images {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String email;
-    private String password;
-    private String role;
-    private String firstName;
-    private String lastName;
-    private String phoneNumber;
+    private String imageUrl;
+    private String name;
+
+    @ManyToOne
+    @JoinColumn(name = "product_id", nullable = false)
+    @JsonBackReference("product-images") // Definisce la relazione inversa con Product
+    private Product product;
 
     @ManyToOne
     @JoinColumn(name = "shop_id", nullable = false)
-    @JsonBackReference("shop-employee") // Evita il ciclo infinito con Shop
     private Shop shop;
 }
