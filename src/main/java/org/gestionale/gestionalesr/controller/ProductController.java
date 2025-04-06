@@ -3,6 +3,7 @@ package org.gestionale.gestionalesr.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.gestionale.gestionalesr.model.Product;
 import org.gestionale.gestionalesr.request.ProductRequest;
+import org.gestionale.gestionalesr.resource.ProductResponse;
 import org.gestionale.gestionalesr.service.product.interfaces.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -38,7 +39,7 @@ public class ProductController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Product>> getProduct() {
+    public ResponseEntity<List<ProductResponse>> getProduct() {
         var response = getAllProductService.getAllProduct();
         return ResponseEntity.ok(response);
     }

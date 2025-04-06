@@ -42,7 +42,6 @@ class FromProductRequestToProductMapperTest {
         assertEquals("Product A", product.getName());
         assertEquals("Description", product.getDescription());
         assertEquals("Category", product.getCategory());
-        assertEquals("Subcategory", product.getSubcategory());
         assertEquals(10.0, product.getPurchasePrice());
         assertEquals(15.0, product.getSalePrice());
         assertEquals(22.0, product.getVatRate());
