@@ -1,5 +1,6 @@
 package org.gestionale.gestionalesr.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -10,6 +11,7 @@ import lombok.*;
 @Getter
 @Setter
 public class Employee {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -20,5 +22,9 @@ public class Employee {
     private String firstName;
     private String lastName;
     private String phoneNumber;
-}
 
+    @ManyToOne
+    @JoinColumn(name = "shop_id", nullable = false)
+    @JsonBackReference("shop-employee") // Evita il ciclo infinito con Shop
+    private Shop shop;
+}

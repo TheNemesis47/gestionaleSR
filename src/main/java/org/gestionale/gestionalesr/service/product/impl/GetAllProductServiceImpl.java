@@ -28,7 +28,7 @@ public class GetAllProductServiceImpl extends BaseService implements GetAllProdu
             return null;
         } else {
             logger.info("Found {} products", result.size());
-            return result;
         }
+        return result;
     }
 }

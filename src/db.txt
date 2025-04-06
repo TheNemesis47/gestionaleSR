@@ -1,10 +1,67 @@
 per il db creare su pgadmin4 un db chiamato "gestionale" avviare l app e creerá le tabelle
 insert di esempio:
 
-INSERT INTO "users" (user_type, email, password, role) VALUES ('Employee', 'mail', 'pass', 'Employee');
-returning id;
 
-INSERT INTO "employees" (first_name, last_name, phone_number, salary, id) VALUES ('mario', 'rossi', '333333' , 1000, 1);
+//shop ----------------------------------------------------------------------------------------
+INSERT INTO shops (name, address, city, zip_code, phone_number, email, piva)
+VALUES ('Negozio Test', 'Via Roma 10', 'Milano', '20100', '1234567890', 'negozio@test.com', 'IT12345678901')
+RETURNING id;
+
+
+//user ----------------------------------------------------------------------------------------
+INSERT INTO employees (email, first_name, last_name, password, phone_number, role, shop_id)
+VALUES ('dipendente@test.com', 'Mario', 'Rossi', '$2a$12$ET568PfIbP15RaZZqZiqgePJxXjfnXgqIyPynYQkyBtKa1JSR.EUu', '0987654321', 'Manager', 1);
+
+
+//supplier ----------------------------------------------------------------------------------------
+INSERT INTO suppliers (
+    name, address, city, zip_code, province, country,
+    phone, email, pec, p_iva, contact_person, notes, registration_date
+) VALUES (
+    'Fornitore XYZ',  -- name
+    'Via delle Industrie 15',  -- address
+    'Roma',  -- city
+    '00100',  -- zip_code
+    'RM',  -- province
+    'Italia',  -- country
+    '0612345678',  -- phone
+    'fornitore@xyz.com',  -- email
+    'fornitore@pec.xyz.com',  -- pec
+    'IT12345678901',  -- p_iva
+    'Giovanni Bianchi',  -- contact_person
+    'Fornisce componenti elettronici',  -- notes
+    CURRENT_DATE  -- registration_date (data attuale)
+);
+
+
+
+//product ----------------------------------------------------------------------------------------
+INSERT INTO products (
+    barcode, category, created_at, depth, description, height,
+    name, purchase_price, sale_price, stock_quantity, subcategory,
+    updated_at, vat_rate, volume, weight, width, shop_id, supplier_id
+) VALUES (
+    '1234567890123',  -- barcode
+    'Elettronica',  -- category
+    NOW(),  -- created_at (timestamp attuale)
+    10.5,  -- depth
+    'Smartphone di ultima generazione',  -- description
+    15.2,  -- height
+    'Smartphone XYZ',  -- name
+    350.00,  -- purchase_price
+    499.99,  -- sale_price
+    100,  -- stock_quantity
+    'Smartphone',  -- subcategory
+    NOW(),  -- updated_at (timestamp attuale)
+    22.00,  -- vat_rate
+    0.75,  -- volume
+    0.2,  -- weight
+    7.8,  -- width
+    1,  -- shop_id (deve esistere nella tabella shops)
+    1  -- supplier_id (deve esistere nella tabella suppliers)
+);
+
+
 
 select u.id, u.email, u.password, u.role,
 	   e.first_name, e.last_name, e.phone_number, e.salary
