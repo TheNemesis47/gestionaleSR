@@ -22,7 +22,7 @@ public class GetProductServiceImpl extends BaseService implements GetProductServ
     @Override
     public Optional<Product> getProduct(Long id) {
         logger.info("Get product with id {}", id);
-        Optional<Product> product = productRepository.findById(id);
+        var product = productRepository.findById(id);
         return product;
     }
 }

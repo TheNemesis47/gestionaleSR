@@ -22,7 +22,7 @@ public class GetAllProductServiceImpl extends BaseService implements GetAllProdu
     @Override
     public List<Product> getAllProduct() {
         logger.info("Get all products");
-        List<Product> result = productRepository.findAll();
+        var result = productRepository.findAll();
         if (result.isEmpty()) {
             logger.warn("No products found");
             return null;

@@ -1,6 +1,5 @@
 package org.gestionale.gestionalesr.service.user.impl;
 
-import org.gestionale.gestionalesr.model.Employee;
 import org.gestionale.gestionalesr.model.UserPrincipal;
 import org.gestionale.gestionalesr.repo.EmployeeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +17,7 @@ public class MyUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        Employee user = repo.findByEmail(email);
+        var user = repo.findByEmail(email);
         System.out.println("User: " + user);
         if (user == null) {
             System.out.println("User Not Found");
