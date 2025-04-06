@@ -60,7 +60,7 @@ public class ProductController {
             ObjectMapper objectMapper = new ObjectMapper();
             ProductRequest productDTO = objectMapper.readValue(productJson, ProductRequest.class);
 
-            Product savedProduct = createProductService.createProduct(productDTO, images);
+            var savedProduct = createProductService.createProduct(productDTO, images);
             if (savedProduct == null) {
                 return ResponseEntity.badRequest().body("Errore nella creazione del prodotto");
             }

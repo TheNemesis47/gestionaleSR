@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
+import lombok.experimental.Accessors;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -14,6 +15,8 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Accessors(chain = true)
+@Builder
 public class Product {
 
     @Id
@@ -22,8 +25,6 @@ public class Product {
 
     private String name;
     private String description;
-    private String category;
-    private String subcategory;
 
     @Column(name = "purchase_price")
     private Double purchasePrice;
@@ -61,8 +62,14 @@ public class Product {
     private Supplier supplier;
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonManagedReference("product-images") // Gestisce la relazione con Images
+    @JsonManagedReference("product-images")
     private List<Images> images;
+
+    @ManyToOne
+    @JoinColumn(name = "category_id")
+    @JsonBackReference
+    private Category category;
+
 
     @PrePersist
     protected void onCreate() {
